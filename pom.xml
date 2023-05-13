@@ -112,6 +112,23 @@
             <version>2.5.1</version>
             <scope>provided</scope>
         </dependency>
+             
+        <dependency>
+            <groupId>com.atlassian.jira</groupId>
+            <artifactId>jira-api</artifactId>
+            <version>9.4.2</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>jndi</groupId>
+                    <artifactId>jndi</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>jta</groupId>
+                    <artifactId>jta</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
 
     <distributionManagement>
@@ -126,6 +143,11 @@
         <repository>
             <id>eficode-github-insightManager</id>
             <url>https://github.com/eficode/devStack/raw/packages/repository/</url>
+        </repository>
+        
+        <repository>
+            <id>atlassian-external</id>
+            <url>https://packages.atlassian.com/mvn/maven-atlassian-external/</url>
         </repository>
     </repositories>
 
