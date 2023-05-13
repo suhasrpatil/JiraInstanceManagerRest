@@ -30,6 +30,7 @@ import unirest.shaded.org.apache.http.NoHttpResponseException
 import unirest.shaded.org.apache.http.conn.ConnectTimeoutException
 import unirest.shaded.org.apache.http.conn.HttpHostConnectException
 import com.atlassian.jira.component.ComponentAccessor
+import com.atlassian.jira.user.util.UserManager
 
 import java.nio.file.StandardCopyOption
 
@@ -42,6 +43,7 @@ final class JiraInstanceManagerRest {
     public String adminUsername = "admin"
     public String adminPassword = "admin"
     public boolean useSamlNoSso = false //Not tested
+    public 
 
 
     /**
@@ -51,7 +53,7 @@ final class JiraInstanceManagerRest {
     JiraInstanceManagerRest(String BaseUrl) {
         baseUrl = BaseUrl
         unirest.config().defaultBaseUrl(BaseUrl).setDefaultBasicAuth(adminUsername, adminPassword)
-
+        userManager = ComponentAccessor.getUserManager()
     }
 
     /**
@@ -480,7 +482,7 @@ final class JiraInstanceManagerRest {
 
     AssetAutomationBean createInsightAutomation(String name, String userName, String eventName, String eventTypeId, String eventIql = null, String eventCron = null, String conditionIql, String actionName, String actionTypeId, String actionData, String schemaId) {
         
-        String actorUserKey = ComponentAccessor.getUserManager().getUserByName(userName).getKey()
+        String actorUserKey = userManager.getUserByName(userName).getKey()
         LazyMap postBody = [
                 id                  : null,
                 name                : name,
