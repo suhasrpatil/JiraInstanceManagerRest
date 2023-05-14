@@ -532,7 +532,7 @@ final class JiraInstanceManagerRest {
 
     }
 
-
+//With LazyMap Actiondata type
     AssetAutomationBean createInsightAutomation(String name, String actorUserKey, String eventName, String eventTypeId, String eventIql = null, String eventCron = null, String conditionIql, String actionName, String actionTypeId, LazyMap actionData, String schemaId) {
 
         LazyMap postBody = [
