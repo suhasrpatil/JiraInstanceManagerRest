@@ -29,7 +29,7 @@ import unirest.shaded.com.google.gson.JsonObject
 import unirest.shaded.org.apache.http.NoHttpResponseException
 import unirest.shaded.org.apache.http.conn.ConnectTimeoutException
 import unirest.shaded.org.apache.http.conn.HttpHostConnectException
-import com.atlassian.jira.component.ComponentAccessor
+
 
 import java.nio.file.StandardCopyOption
 
@@ -478,9 +478,63 @@ final class JiraInstanceManagerRest {
 
     }
 
-    AssetAutomationBean createInsightAutomation(String name, String userName, String eventName, String eventTypeId, String eventIql = null, String eventCron = null, String conditionIql, String actionName, String actionTypeId, String actionData, String schemaId) {
-        
-        String actorUserKey = ComponentAccessor.getUserManager().getUserByName(userName).getKey()
+    AssetAutomationBean createInsightAutomation(String name, String actorUserKey, String eventName, String eventTypeId, String eventIql = null, String eventCron = null, String conditionIql, String actionName, String actionTypeId, String actionData, String schemaId) {
+
+        LazyMap postBody = [
+                id                  : null,
+                name                : name,
+                description         : null,
+                schemaId            : schemaId,
+                actorUserKey        : actorUserKey,
+                disabled            : null,
+                events              : [
+                        [
+                                id    : null,
+                                name  : eventName,
+                                typeId: eventTypeId,
+                                iql   : eventIql,
+                                cron  : eventCron
+                        ]
+                ],
+                conditionsAndActions: [
+                        [
+                                id        : null,
+                                name      : null,
+                                conditions: [
+                                        [
+                                                id       : null,
+                                                name     : conditionIql,
+                                                condition: conditionIql
+                                        ]
+                                ],
+                                actions   : [
+                                        [
+                                                id                   : null,
+                                                name                 : actionName,
+                                                typeId               : actionTypeId,
+                                                data                 : actionData,
+                                                minTimeBetweenActions: null
+                                        ]
+                                ]
+                        ]
+                ],
+                created             : null,
+                updated             : null,
+                lastTimeOfAction    : null
+        ]
+
+        Cookies cookies = acquireWebSudoCookies()
+        HttpResponse<AssetAutomationBean> response = unirest.post("/rest/insight/1.0/automation/rule").cookie(cookies).header("Content-Type", "application/json").body(postBody).asObject(AssetAutomationBean.class)
+        assert response.status == 200: "Error creationg Asset Automation"
+
+
+        return response.body
+
+    }
+
+
+    AssetAutomationBean createInsightAutomation(String name, String actorUserKey, String eventName, String eventTypeId, String eventIql = null, String eventCron = null, String conditionIql, String actionName, String actionTypeId, LazyMap actionData, String schemaId) {
+
         LazyMap postBody = [
                 id                  : null,
                 name                : name,
@@ -1811,6 +1865,18 @@ final class JiraInstanceManagerRest {
 
         return updateScriptrunnerFiles(filesToUpload) && tempDir.deleteDir()
 
+
+    }
+
+    String getUserKey(String userName){
+        Cookies cookies = acquireWebSudoCookies()
+        HttpResponse response = unirest.get("/rest/api/2/user?username=admin")
+                                                            .cookie(cookies)
+                                                            .header("Content-Type", "application/json")
+                                                            .queryString(["username":userName])
+                                                            .asJson()
+        assert response.status == 200: "Error getting userKey"
+        return response.body.object.toMap().key
 
     }
 
