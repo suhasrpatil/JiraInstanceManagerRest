@@ -51,7 +51,6 @@ final class JiraInstanceManagerRest {
     JiraInstanceManagerRest(String BaseUrl) {
         baseUrl = BaseUrl
         unirest.config().defaultBaseUrl(BaseUrl).setDefaultBasicAuth(adminUsername, adminPassword)
-        userManager = ComponentAccessor.getUserManager()
     }
 
     /**
@@ -535,6 +534,7 @@ final class JiraInstanceManagerRest {
 
 
     AssetAutomationBean createInsightAutomation(String name, String actorUserKey, String eventName, String eventTypeId, String eventIql = null, String eventCron = null, String conditionIql, String actionName, String actionTypeId, Array actionData, String schemaId) {
+
 
         LazyMap postBody = [
                 id                  : null,
