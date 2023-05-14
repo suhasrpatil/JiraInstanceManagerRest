@@ -51,7 +51,6 @@ final class JiraInstanceManagerRest {
     JiraInstanceManagerRest(String BaseUrl) {
         baseUrl = BaseUrl
         unirest.config().defaultBaseUrl(BaseUrl).setDefaultBasicAuth(adminUsername, adminPassword)
-        userManager = ComponentAccessor.getUserManager()
     }
 
     /**
