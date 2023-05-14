@@ -30,7 +30,6 @@ import unirest.shaded.org.apache.http.NoHttpResponseException
 import unirest.shaded.org.apache.http.conn.ConnectTimeoutException
 import unirest.shaded.org.apache.http.conn.HttpHostConnectException
 
-
 import java.nio.file.StandardCopyOption
 
 final class JiraInstanceManagerRest {
@@ -42,6 +41,7 @@ final class JiraInstanceManagerRest {
     public String adminUsername = "admin"
     public String adminPassword = "admin"
     public boolean useSamlNoSso = false //Not tested
+    public 
 
 
     /**
@@ -51,7 +51,7 @@ final class JiraInstanceManagerRest {
     JiraInstanceManagerRest(String BaseUrl) {
         baseUrl = BaseUrl
         unirest.config().defaultBaseUrl(BaseUrl).setDefaultBasicAuth(adminUsername, adminPassword)
-
+        userManager = ComponentAccessor.getUserManager()
     }
 
     /**
@@ -477,6 +477,7 @@ final class JiraInstanceManagerRest {
                 schemaId)
 
     }
+
 
     AssetAutomationBean createInsightAutomation(String name, String actorUserKey, String eventName, String eventTypeId, String eventIql = null, String eventCron = null, String conditionIql, String actionName, String actionTypeId, String actionData, String schemaId) {
 
