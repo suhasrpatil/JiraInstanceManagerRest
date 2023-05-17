@@ -533,7 +533,7 @@ final class JiraInstanceManagerRest {
     }
 
 
-    AssetAutomationBean createInsightAutomation(String name, String actorUserKey, String eventName, String eventTypeId, String eventIql = null, String eventCron = null, String conditionIql, String actionName, String actionTypeId, Map actionData, String schemaId) {
+    AssetAutomationBean createInsightAutomation(String name, String actorUserKey, String eventName, String eventTypeId, String eventIql = null, String eventCron = null, String conditionIql, String actionName, String actionTypeId, LazyMap actionData, String schemaId) {
 
 
         LazyMap postBody = [
@@ -578,9 +578,11 @@ final class JiraInstanceManagerRest {
                 updated             : null,
                 lastTimeOfAction    : null
         ]
-
+        log.debug("PostBody: $postBody")
         Cookies cookies = acquireWebSudoCookies()
         HttpResponse<AssetAutomationBean> response = unirest.post("/rest/insight/1.0/automation/rule").cookie(cookies).header("Content-Type", "application/json").body(postBody).asObject(AssetAutomationBean.class)
+        log.debug("Response Status: "+response.status)
+        log.debug(response.body.toString())
         assert response.status == 200: "Error creationg Asset Automation"
 
 
