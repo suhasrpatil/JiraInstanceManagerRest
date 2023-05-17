@@ -568,7 +568,7 @@ final class JiraInstanceManagerRest {
                                                 id                   : null,
                                                 name                 : actionName,
                                                 typeId               : actionTypeId,
-                                                data                 : actionData,
+                                                data                 : [actionData],
                                                 minTimeBetweenActions: null
                                         ]
                                 ]
